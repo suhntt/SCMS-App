@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCMS | Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563EB;
+            --accent: #3B82F6;
+            --bg: #0F172A;
+            --surface: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #F8FAFC;
+            --text-dim: #94A3B8;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text);
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.1), transparent 40%);
+        }
+
+        #login-gate {
+            position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .login-box {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 40px; border-radius: 24px; width: 400px; text-align: center;
+            backdrop-filter: blur(20px);
+        }
+        .login-box h2 { font-family: 'Outfit'; margin-bottom: 24px; font-size: 28px; }
+        input, select, textarea {
+            width: 100%; padding: 12px 16px; margin-bottom: 16px;
+            background: rgba(0,0,0,0.2); border: 1px solid var(--border);
+            border-radius: 12px; color: white; outline: none; transition: 0.3s;
+        }
+        .btn-full { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 12px; color: white; font-weight: 700; cursor: pointer; }
+        
+        .wrapper { display: none; padding: 40px; max-width: 1500px; margin: auto; }
+        header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+        h1 { font-family: 'Outfit'; font-size: 36px; }
+
+        .grid { display: grid; grid-template-columns: 2.2fr 0.8fr; gap: 32px; }
+
+        .card { 
+            background: var(--surface); border: 1px solid var(--border); 
+            border-radius: 24px; padding: 24px; backdrop-filter: blur(10px);
+            margin-bottom: 32px;
+        }
+        .card h3 { font-family: 'Outfit'; font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th { text-align: left; color: var(--text-dim); font-size: 11px; padding: 12px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 16px 12px; border-bottom: 1px solid var(--border); vertical-align: top; word-break: break-word; }
+
+        .img-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 1px solid var(--border); }
+
+        .badge { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; display: inline-block; }
+        .badge.pending { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .badge.resolved { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+
+        .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-dim); }
+        .btn-sm { padding: 8px 12px; border-radius: 8px; background: var(--primary); border: none; color: white; font-weight: 600; cursor: pointer; }
+
+        .map-link { 
+            color: var(--accent); text-decoration: none; font-size: 11px; 
+            font-weight: 700; display: block; margin-top: 6px; 
+            transition: color 0.2s;
+        }
+        .map-link:hover { color: #60A5FA; text-decoration: underline; }
+
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; padding: 40px; }
+        #modal img { max-height: 100%; max-width: 100%; border-radius: 12px; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-gate">
+        <div class="login-box">
+            <h2>Command Login</h2>
+            <input type="email" id="l-email" placeholder="Admin Email" value="scms@gmail.com">
+            <input type="password" id="l-pass" placeholder="Master Password">
+            <button class="btn-full" onclick="doLogin()">Authorize System</button>
+            <p id="l-err" style="color: var(--danger); font-size: 13px; margin-top: 16px;"></p>
+        </div>
+    </div>
+
+    <div class="wrapper" id="main-ui">
+        <header>
+            <div>
+                <h1>SCMS Control Panel</h1>
+                <p style="color: var(--text-dim);">Live Operations Dashboard</p>
+            </div>
+            <button class="btn-sm" style="background: var(--surface)" onclick="logout()">Logout Session</button>
+        </header>
+
+        <div class="grid">
+            <div class="left">
+                <div class="card">
+                    <h3>🔍 Feed & Location Monitoring</h3>
+                    <table id="complaint-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Visual</th>
+                                <th style="width: 200px;">Category & ID</th>
+                                <th>Description</th>
+                                <th style="width: 180px;">Location</th>
+                                <th style="width: 100px;">Status</th>
+                                <th style="width: 150px;">Routing</th>
+                                <th style="width: 80px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="complaint-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="card">
+                    <h3>🚨 Emergency Broadcast</h3>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="a-title" placeholder="Flood Alert, etc.">
+                        <label>Instructions</label>
+                        <textarea id="a-msg" rows="3" placeholder="Citizen instructions..."></textarea>
+                        <label>Priority</label>
+                        <select id="a-type">
+                            <option value="danger">High Danger</option>
+                            <option value="warning">Warning</option>
+                            <option value="info">Info</option>
+                        </select>
+                        <button class="btn-full" onclick="broadcastAlert()">Broadcast Now</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🏆 Points Master</h3>
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" id="p-uid">
+                        <label>Reward Amount</label>
+                        <input type="number" id="p-amt">
+                        <button class="btn-full" style="background: var(--success);" onclick="adjustPoints()">Add Points</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" onclick="this.style.display='none'">
+        <img src="" id="modal-img">
+    </div>
+
+    <script>
+        const API = "http://localhost:3000";
+
+        function doLogin() {
+            const e = document.getElementById('l-email').value;
+            const p = document.getElementById('l-pass').value;
+            if (e === "scms@gmail.com" && p === "Admin@#12345") {
+                document.getElementById('login-gate').style.display = 'none';
+                document.getElementById('main-ui').style.display = 'block';
+                loadData();
+                setInterval(loadData, 5000);
+            } else {
+                document.getElementById('l-err').innerText = "Access Denied";
+            }
+        }
+        function logout() { window.location.reload(); }
+
+        async function loadData() {
+            try {
+                const res = await fetch(`${API}/complaints`);
+                const data = await res.json();
+                renderComplaints(data.reverse());
+            } catch (err) { console.error(err); }
+        }
+
+        function renderComplaints(data) {
+            const body = document.getElementById('complaint-body');
+            body.innerHTML = '';
+            data.forEach(c => {
+                const tr = document.createElement('tr');
+                const photo = c.photo_url ? `<img src="${c.photo_url}" class="img-thumb" onclick="zoom('${c.photo_url}')">` : 'N/A';
+                const mapUrl = `https://www.google.com/maps?q=${c.latitude},${c.longitude}`;
+                
+                tr.innerHTML = `
+                    <td>${photo}</td>
+                    <td>
+                        <div style="font-weight:700;">${c.category}</div>
+                        <div style="font-size:10px; color:var(--text-dim);">TICKET: #${c.id}</div>
+                    </td>
+                    <td style="font-size:13px; color:#CBD5E1;">${c.description}</td>
+                    <td>
+                        <div style="font-size:11px; line-height:1.4;">${c.address}</div>
+                        <a href="${mapUrl}" target="_blank" class="map-link">🛰️ VIEW ON SATELLITE MAP</a>
+                    </td>
+                    <td><span class="badge ${c.status === 'Resolved' ? 'resolved' : 'pending'}">${c.status || 'Pending'}</span></td>
+                    <td>
+                        <select style="font-size:11px; padding:6px; margin:0;" onchange="routeDept(${c.id}, this.value)">
+                            <option value="">Assign Dept...</option>
+                            <option value="Sanitation" ${c.assigned_department=='Sanitation'?'selected':''}>Sanitation</option>
+                            <option value="Roads" ${c.assigned_department=='Roads'?'selected':''}>PWD/Roads</option>
+                            <option value="Electricity" ${c.assigned_department=='Electricity'?'selected':''}>Electricity</option>
+                        </select>
+                    </td>
+                    <td>
+                        ${c.status !== 'Resolved' ? `<button class="btn-sm" style="background:var(--success)" onclick="resolveTicket(${c.id})">Fix</button>` : '✅'}
+                    </td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        async function resolveTicket(id) { await fetch(`${API}/complaint/resolve/${id}`, { method: 'POST' }); loadData(); }
+        async function routeDept(id, dept) { await fetch(`${API}/complaint/department/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ department: dept }) }); }
+        
+        async function broadcastAlert() {
+            const res = await fetch(`${API}/admin/alerts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title:document.getElementById('a-title').value, message:document.getElementById('a-msg').value, type:document.getElementById('a-type').value, area:"City Wide"}) });
+            if(res.ok) alert("Alert Broadcast Sent!");
+        }
+        
+        async function adjustPoints() {
+            await fetch(`${API}/admin/user-points`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId:document.getElementById('p-uid').value, points:document.getElementById('p-amt').value }) });
+            alert("Points Updated");
+        }
+
+        function zoom(url) { document.getElementById('modal-img').src = url; document.getElementById('modal').style.display = 'flex'; }
+    </script>
+</body>
+</html>
