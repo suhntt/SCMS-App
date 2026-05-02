@@ -1,87 +1,101 @@
 # 🛡️ SCMS: Smart Complaint Management System
 ### *AI Sentinel Edition — B.Tech CSE Final Year Project*
 
-**SCMS** is a high-performance, full-stack municipal infrastructure platform designed to bridge the gap between citizens and city administration. It leverages **Simulated AI Intelligence** to automate priority scoring, prevent duplicate reporting, and provide real-time decision support for urban governance.
+**SCMS** is an advanced, full-stack municipal governance platform designed to revolutionize how citizens interact with city administration. Unlike traditional complaint portals, SCMS integrates a **Simulated AI Intelligence Layer** (Sentinel AI) to manage infrastructure issues with high precision, zero duplication, and autonomous prioritization.
 
 ---
 
-## 🚀 Key Features
+## 🚀 The "Sentinel" System Workflow: How it Works
 
-### 🤖 AI Sentinel Intelligence
-- **Visual Fingerprinting:** Detects 90%+ visual similarity in complaint photos to prevent spam and duplicate reports.
-- **Semantic Duplication:** Uses Natural Language Processing (NLP) to check for overlapping descriptions in a specific geospatial radius.
-- **Priority Scoring (0-100):** Automatically ranks incidents based on urgency keywords (e.g., "Fire", "Live Wire", "Flooding").
-- **Sentiment Pulse:** Analyzes the citizen's mood to help admins prioritize distressed reports.
+The SCMS ecosystem operates through a closed-loop intelligence cycle between the **Citizen**, the **AI Engine**, and the **City Administrator**.
 
-### 📱 Citizen Mobile App (Android)
-- **Modern UI:** Built with **Jetpack Compose** and **Material3** with full Dark/Light mode adaptivity.
-- **Offline Resilience:** Full support for filing complaints without internet; auto-syncs using **WorkManager** when back online.
-- **High-Priority Alerts:** WhatsApp-grade lock-screen notifications for district-wide emergencies.
-- **Gamification:** Citizens earn "SCMS Points" for verified reports, encouraging civic engagement.
+### 1. Unified Citizen Onboarding
+- **Secure Authentication:** Citizens log in via a dual-mode system (Email/Password or Firebase Phone OTP).
+- **Profile Registry:** Each citizen has a profile that tracks their "SCMS Points" (Social Credits), encouraging honest and helpful reporting.
 
-### 🏛️ Admin Command Center (Web)
-- **Tactical Dashboard:** Real-time geospatial mapping of all active incidents.
-- **Autonomous Dispatch:** AI suggests the specific municipal unit (PWD, Electricity Board, etc.) for each complaint.
-- **Global Broadcast:** Admins can send emergency signals to all citizens in a specific district.
+### 2. Intelligent Incident Reporting
+- **Multi-Evidence Capture:** Citizens can take up to 5 high-resolution photos of an issue (potholes, water leaks, etc.).
+- **Live Geospatial Tracking:** The app automatically detects the **District**, **Address**, and precise **GPS Coordinates** using a hybrid of Google Fused Location and Backend Nominatim API.
+- **Sentinel AI Pre-Scan:** As the user captures photos, the "AI Sentinel" performs a visual scan (simulated fingerprinting) to ensure the image is a valid infrastructure issue.
+
+### 3. The "Gatekeeper" (Duplication Detection)
+Before a complaint is submitted, the **AI Engine** performs a real-time audit:
+- **Spatial Audit:** Checks if a similar complaint exists within a 50-meter radius.
+- **Semantic Audit:** Analyzes the description text using NLP to see if the same issue was reported by another user.
+- **Decision:** If a match is found, the user is alerted via a **Sentinel Vision Dialog** and encouraged to "Upvote" the existing report instead of creating database noise.
+
+### 4. Admin Command Center & AI Intake
+Once a unique complaint is filed, it hits the Admin Dashboard, where the AI takes over:
+- **Autonomous Priority Scoring:** The AI scans for emergency keywords and sets a priority score from 0-100.
+- **Sentiment Pulse:** The system detects if a citizen is angry or panicked, flagging the report for immediate attention.
+- **Department Dispatch:** The AI recommends the best unit for the job (e.g., "Electricity Board" for live wires).
+
+### 5. Resolution & Verification
+- **Dispatching Units:** The Admin assigns the task to a specific department.
+- **Closure with Proof:** Once the work is done, the Admin uploads a **Resolution Photo** as proof.
+- **Citizen Feedback Loop:** The citizen receives a high-priority push notification confirming their issue has been solved.
 
 ---
 
-## 🛠️ Tech Stack
+## ⚡ Technical Architecture & Optimizations
+
+### 🔋 Offline-First Resilience
+The app is designed for real-world reliability. If the user is in a "Dead Zone" (no internet):
+- Data is saved in a local **Room Database**.
+- **WorkManager** schedules a background task that "wakes up" as soon as a 4G/Wi-Fi connection is detected to sync the report.
+
+### 📶 Data & Battery Optimization
+- **10MB Intelligent Cache:** Uses OkHttp caching to serve repeated data (like Leaderboards) without using the internet.
+- **Image Compression:** Raw 5MB photos are compressed to <500KB before upload, saving 90% of user data.
+- **Battery Guard:** Background sync only runs if the battery is not low and the connection is stable.
+
+### 🔔 High-Priority Emergency Signal
+Uses **Firebase Cloud Messaging (FCM)** with `PRIORITY_HIGH` flags to ensure that critical city alerts (like floods or road closures) pop up on the citizen's **Locked Screen** immediately, just like a WhatsApp message.
+
+---
+
+## 🛠️ Technology Stack
 
 | Layer | Technology |
 |---|---|
-| **Mobile** | Kotlin, Jetpack Compose, Retrofit2, Room DB, WorkManager |
-| **Admin** | React.js, Leaflet Maps, Chart.js, Tailwind CSS |
-| **Backend** | Node.js, Express.js, MySQL / Firestore |
-| **Cloud** | Firebase Cloud Messaging (FCM), Cloudinary (Image Optimization) |
-| **Auth** | Firebase Auth (OTP & Email), JWT-based session management |
+| **Mobile Application** | Kotlin, Jetpack Compose, Retrofit2, Room DB, WorkManager, Coroutines |
+| **Admin Dashboard** | React.js, Vite, Leaflet.js (Maps), Chart.js (Analytics), Tailwind CSS |
+| **Backend Server** | Node.js, Express.js, HuggingFace NLP API (Semantic Similarity) |
+| **Database** | MySQL (Structured Storage) + Firestore (Real-time Broadcasts) |
+| **Media Management** | Cloudinary API (Automated Image Optimization & CDN) |
 
 ---
 
-## 📦 Project Structure
+## ⚡ Quick Setup Guide
 
-```text
-├── app/                  # Android Application (Kotlin/Compose)
-├── scms-admin/           # Web Dashboard (React/Vite)
-├── scms-backend/          # API Server (Node.js/Express)
-├── PROJECT_GUIDE.md      # Detailed Implementation Roadmap
-└── README.md             # This file
-```
-
----
-
-## ⚡ Quick Setup
-
-### 1. Backend & Admin
+### 1. Backend Setup
 ```bash
-# Navigate to backend
 cd scms-backend
 npm install
+# Add your .env (CLOUDINARY_URL, FIREBASE_CONFIG)
 npm start
+```
 
-# Navigate to admin
+### 2. Admin Setup
+```bash
 cd scms-admin
 npm install
 npm run dev
 ```
 
-### 2. Android App
-1. Open the `app` folder in **Android Studio (Ladybug or later)**.
-2. Ensure you have a valid `google-services.json` in the `app/` directory.
-3. Update the `BASE_URL` in `RetrofitClient.kt` to match your local machine's IP.
-4. Press **Run**.
+### 3. Mobile App Setup
+- Open `app/` in Android Studio.
+- Change `BASE_URL` in `data/network/RetrofitClient.kt` to your machine's IP address.
+- Connect your phone and press **Run**.
 
 ---
 
-## 🎓 Academic Context
-- **Project Title:** Smart Complaint Management System (SCMS)
-- **Level:** B.Tech CSE Final Year Project
-- **Key Focus:** Full-Stack Development, AI/ML Integration, Mobile Computing, Urban Governance.
+## 🎓 Academic Contribution
+This project was developed for a **B.Tech Computer Science Final Year Project**. It demonstrates proficiency in:
+- **Full-Stack System Design**
+- **Mobile Computing & Declarative UI**
+- **AI/ML Concepts in Urban Governance**
+- **Distributed System Resilience**
 
 ---
-
-## 📜 License
-This project is developed for academic purposes. All rights reserved.
-
----
-*Developed with ❤️ for a Smarter Future.*
+*Developed by **Sushanta Chetry** — SCMS 2026 Release*
