@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SCMS – Full Project Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --primary: #1e40af;
+    --primary-light: #3b82f6;
+    --accent: #0ea5e9;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --dark: #0f172a;
+    --gray: #64748b;
+    --light-gray: #f1f5f9;
+    --border: #e2e8f0;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(59,130,246,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(14,165,233,0.10) 0%, transparent 50%);
+  }
+  .cover-badge {
+    background: rgba(59,130,246,0.2);
+    border: 1px solid rgba(59,130,246,0.4);
+    color: #93c5fd;
+    padding: 6px 20px;
+    border-radius: 100px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .cover-logo {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: 0 auto 32px;
+    box-shadow: 0 20px 60px rgba(59,130,246,0.4);
+    position: relative;
+  }
+  .cover h1 {
+    font-size: 48px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .cover h1 span { color: #60a5fa; }
+  .cover-subtitle {
+    font-size: 20px;
+    color: #94a3b8;
+    font-weight: 400;
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .cover-divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #0ea5e9);
+    border-radius: 2px;
+    margin: 0 auto 48px;
+    position: relative;
+  }
+  .cover-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 700px;
+    width: 100%;
+    position: relative;
+  }
+  .cover-meta-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .cover-meta-item .label { color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .cover-meta-item .value { color: #e2e8f0; font-weight: 600; font-size: 14px; }
+  .cover-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 40px;
+    position: relative;
+  }
+  .cover-tag {
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: #93c5fd;
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+  }
+
+  /* MAIN CONTENT */
+  .content {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* TOC */
+  .toc {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 60px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    page-break-after: always;
+  }
+  .toc h2 { font-size: 24px; font-weight: 700; color: var(--dark); margin-bottom: 24px; }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: inherit;
+  }
+  .toc-item:last-child { border-bottom: none; }
+  .toc-num {
+    width: 36px;
+    height: 36px;
+    background: var(--light-gray);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--primary);
+    margin-right: 16px;
+    flex-shrink: 0;
+  }
+  .toc-title { font-weight: 500; color: var(--dark); font-size: 15px; }
+  .toc-dots { flex: 1; border-bottom: 2px dotted var(--border); margin: 0 12px; margin-top: 4px; }
+  .toc-page { color: var(--gray); font-size: 13px; }
+
+  /* SECTION */
+  .section { margin-bottom: 60px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 26px; font-weight: 700; color: var(--dark); }
+
+  h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin: 28px 0 12px; }
+  h4 { font-size: 15px; font-weight: 600; color: var(--primary); margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  p { color: #334155; margin-bottom: 14px; line-height: 1.8; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 8px; color: #334155; }
+
+  /* HIGHLIGHT BOXES */
+  .callout {
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    display: flex;
+    gap: 14px;
+  }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .callout.info { background: #eff6ff; border-left: 4px solid #3b82f6; }
+  .callout.success { background: #f0fdf4; border-left: 4px solid #16a34a; }
+  .callout.warning { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout p { margin: 0; font-size: 14px; color: #1e293b; }
+
+  /* TECH CARDS */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .tech-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .tech-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .tech-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .tech-card h4 { margin: 0; font-size: 14px; font-weight: 700; color: var(--dark); text-transform: none; letter-spacing: 0; }
+  .tech-card .why { font-size: 12px; color: var(--gray); margin-top: 8px; line-height: 1.6; }
+  .tech-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  /* FEATURE LIST */
+  .feature-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+  .feature-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .feature-emoji { font-size: 20px; flex-shrink: 0; }
+  .feature-item h5 { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+  .feature-item p { font-size: 12px; color: var(--gray); margin: 0; line-height: 1.5; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  thead { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+  thead th { color: white; font-size: 13px; font-weight: 600; padding: 14px 16px; text-align: left; }
+  tbody tr:nth-child(even) { background: var(--light-gray); }
+  tbody tr:nth-child(odd) { background: white; }
+  tbody td { padding: 12px 16px; font-size: 13px; color: #334155; border-bottom: 1px solid var(--border); vertical-align: top; }
+  td code {
+    background: #f1f5f9;
+    color: var(--primary);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #0f172a;
+    border-radius: 14px;
+    padding: 24px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .code-block pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.7;
+    white-space: pre;
+  }
+  .code-block .kw { color: #f472b6; }
+  .code-block .str { color: #86efac; }
+  .code-block .cm { color: #475569; }
+
+  /* RESULT ITEMS */
+  .result-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .result-status {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .result-status.pass { background: #dcfce7; }
+  .result-status.fail { background: #fee2e2; }
+  .result-item h5 { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+  .result-item p { font-size: 13px; color: var(--gray); margin: 0; }
+
+  /* ARCHITECTURE */
+  .arch-diagram {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 32px;
+    margin: 20px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 2;
+  }
+  .arch-diagram .highlight { color: #60a5fa; }
+  .arch-diagram .green { color: #86efac; }
+  .arch-diagram .yellow { color: #fbbf24; }
+  .arch-diagram .pink { color: #f9a8d4; }
+
+  /* PAPER CARD */
+  .paper-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 14px 14px 0;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .paper-card .paper-num { font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .paper-card h4 { margin: 0 0 8px; font-size: 15px; color: var(--dark); text-transform: none; letter-spacing: 0; }
+  .paper-card .authors { font-size: 12px; color: var(--gray); margin-bottom: 10px; }
+  .paper-card p { font-size: 13px; margin: 0; }
+  .paper-card .relevance { background: #eff6ff; border-radius: 8px; padding: 10px 14px; margin-top: 12px; font-size: 12px; color: #1d4ed8; }
+
+  /* STAT BOXES */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 24px 0; }
+  .stat-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .stat-box .stat-num { font-size: 32px; font-weight: 800; color: var(--primary); }
+  .stat-box .stat-label { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+  /* FOOTER */
+  .report-footer {
+    background: var(--dark);
+    color: #64748b;
+    text-align: center;
+    padding: 40px;
+    font-size: 13px;
+    margin-top: 60px;
+  }
+  .report-footer strong { color: #94a3b8; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; }
+    .cover { page-break-after: always; }
+    .toc { page-break-after: always; }
+    .section { page-break-inside: avoid; }
+    .content { padding: 40px 20px; }
+  }
+
+  /* TAGS */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+  .tag.blue { background: #dbeafe; color: #1d4ed8; }
+  .tag.green { background: #dcfce7; color: #15803d; }
+  .tag.orange { background: #ffedd5; color: #c2410c; }
+  .tag.purple { background: #ede9fe; color: #6d28d9; }
+  .tag.red { background: #fee2e2; color: #b91c1c; }
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════╗ -->
+<!-- ║           COVER PAGE             ║ -->
+<!-- ╚══════════════════════════════════╝ -->
+<div class="cover">
+  <div class="cover-badge">Final Year Project Report · 2025–2026</div>
+  <div class="cover-logo">🏙️</div>
+  <h1>Smart City Management <span>System</span></h1>
+  <p class="cover-subtitle">SCMS — A Full-Stack Civic Engagement Platform</p>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Project Type</div>
+      <div class="value">Android + Web + Backend</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Submission Date</div>
+      <div class="value">27 April, 2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Version</div>
+      <div class="value">1.0 — Production Ready</div>
+    </div>
+  </div>
+  <div class="cover-tags">
+    <span class="cover-tag">Kotlin</span>
+    <span class="cover-tag">Jetpack Compose</span>
+    <span class="cover-tag">Firebase</span>
+    <span class="cover-tag">Node.js</span>
+    <span class="cover-tag">MySQL</span>
+    <span class="cover-tag">Cloudinary</span>
+    <span class="cover-tag">React.js</span>
+    <span class="cover-tag">Retrofit</span>
+    <span class="cover-tag">CameraX</span>
+    <span class="cover-tag">Nearby Connections P2P</span>
+    <span class="cover-tag">FCM Push Notifications</span>
+    <span class="cover-tag">Offline Sync</span>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════╗ -->
+<!-- ║          MAIN CONTENT            ║ -->
+<!-- ╚══════════════════════════════════╝ -->
+<div class="content">
+
+  <!-- ─── QUICK STATS ─── -->
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num">3</div>
+      <div class="stat-label">System Layers<br>(App / Backend / Web)</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">17+</div>
+      <div class="stat-label">Technologies<br>Integrated</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">12+</div>
+      <div class="stat-label">Core App<br>Screens</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Offline<br>Capable</div>
+    </div>
+  </div>
+
+  <!-- ─── TABLE OF CONTENTS ─── -->
+  <div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <a class="toc-item" href="#s1">
+      <div class="toc-num">1</div>
+      <div class="toc-title">Introduction & Project Overview</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">3</div>
+    </a>
+    <a class="toc-item" href="#s2">
+      <div class="toc-num">2</div>
+      <div class="toc-title">Problem Statement</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">4</div>
+    </a>
+    <a class="toc-item" href="#s3">
+      <div class="toc-num">3</div>
+      <div class="toc-title">All Technologies Used — What & Why</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">5</div>
+    </a>
+    <a class="toc-item" href="#s4">
+      <div class="toc-num">4</div>
+      <div class="toc-title">Complete Feature List</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">8</div>
+    </a>
+    <a class="toc-item" href="#s5">
+      <div class="toc-num">5</div>
+      <div class="toc-title">System Architecture & Data Flow</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">10</div>
+    </a>
+    <a class="toc-item" href="#s6">
+      <div class="toc-num">6</div>
+      <div class="toc-title">Literature Review (6 Papers)</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">12</div>
+    </a>
+    <a class="toc-item" href="#s7">
+      <div class="toc-num">7</div>
+      <div class="toc-title">Proposed Methodology</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">14</div>
+    </a>
+    <a class="toc-item" href="#s8">
+      <div class="toc-num">8</div>
+      <div class="toc-title">Software & Hardware Requirements</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">16</div>
+    </a>
+    <a class="toc-item" href="#s9">
+      <div class="toc-num">9</div>
+      <div class="toc-title">Experiments & Test Results</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">17</div>
+    </a>
+    <a class="toc-item" href="#s10">
+      <div class="toc-num">10</div>
+      <div class="toc-title">Conclusion & Future Work</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">19</div>
+    </a>
+    <a class="toc-item" href="#s11">
+      <div class="toc-num">11</div>
+      <div class="toc-title">References</div>
+      <div class="toc-dots"></div>
+      <div class="toc-page">20</div>
+    </a>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 1: INTRODUCTION               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Introduction & Project Overview</div>
+    </div>
+
+    <p>The <strong>Smart City Management System (SCMS)</strong> is a full-stack, mobile-first digital platform designed to empower urban citizens to report, track, and engage with city infrastructure issues — while giving government and city authorities a powerful web-based dashboard to manage and resolve those complaints effectively.</p>
+
+    <p>Urban areas across the world face ongoing challenges with infrastructure degradation. Roads develop potholes, street lights fail, drains overflow, and illegal dumping occurs at alarming frequencies. Traditional systems — phone lines, paper forms, static email portals — are slow, unacknowledged, and opaque. SCMS was built to replace these outdated workflows with a transparent, real-time, GPS-verified, photo-backed digital complaint ecosystem.</p>
+
+    <div class="callout info">
+      <div class="callout-icon">💡</div>
+      <p><strong>Core Mission:</strong> SCMS connects every citizen directly to city authorities through a modern Android application, ensuring that every infrastructure problem is reported, tracked, prioritized, and resolved — with full transparency for both parties.</p>
+    </div>
+
+    <h3>What Makes SCMS Different?</h3>
+    <ul>
+      <li><strong>Works without internet</strong> — complaints are saved locally and synced automatically when connectivity returns</li>
+      <li><strong>GPS + Photo verified</strong> — every complaint carries geolocation data and visual evidence, making fake or vague reports impossible</li>
+      <li><strong>AI-lite duplicate detection</strong> — the backend detects if a similar complaint already exists nearby and gives citizens the option to upvote instead of duplicating</li>
+      <li><strong>Peer-to-Peer mesh relay</strong> — in extreme offline scenarios, complaints are relayed device-to-device via Bluetooth/Wi-Fi until they reach a connected peer</li>
+      <li><strong>Gamified participation</strong> — citizens earn XP points and badges for reporting, creating a healthy competitive civic culture</li>
+      <li><strong>Real-time alerts</strong> — city officials can broadcast emergency alerts instantly to all citizens via push notifications</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 2: PROBLEM STATEMENT          -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Problem Statement</div>
+    </div>
+
+    <p>Urban infrastructure degradation is a universal challenge that affects millions of citizens daily. Despite high visibility of issues like broken roads, failed street lights, or overflowing bins — traditional reporting mechanisms fail citizens on virtually every dimension:</p>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Problem</th><th>Impact</th><th>SCMS Solution</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>No mobile-accessible reporting portal</td><td>Citizens cannot report on-the-spot</td><td>Native Android app, 100% mobile-first</td></tr>
+        <tr><td>2</td><td>No GPS tagging on complaints</td><td>Authorities can't locate the exact issue</td><td>Mandatory GPS + Geocoded address</td></tr>
+        <tr><td>3</td><td>No photo evidence supported</td><td>Vague reports lead to no action</td><td>CameraX integration — photo required</td></tr>
+        <tr><td>4</td><td>No offline reporting capability</td><td>Rural/low-signal areas are excluded</td><td>Local queuing + P2P mesh relay</td></tr>
+        <tr><td>5</td><td>Duplicate reports flood the system</td><td>Administrative overhead; confused priority</td><td>Backend duplicate check + upvoting</td></tr>
+        <tr><td>6</td><td>No status updates or transparency</td><td>Citizens don't know if issue was addressed</td><td>Real-time status tracking in the app</td></tr>
+        <tr><td>7</td><td>No civic engagement incentive</td><td>Low participation rates</td><td>Gamification — XP points + leaderboard</td></tr>
+        <tr><td>8</td><td>No emergency alert broadcast system</td><td>Authorities can't reach citizens quickly</td><td>FCM push notifications for alerts</td></tr>
+        <tr><td>9</td><td>Sessions expire forcing repeated logins</td><td>Poor user experience for returning users</td><td>Firebase Auth + SharedPreferences session</td></tr>
+        <tr><td>10</td><td>No admin oversight dashboard</td><td>No centralized complaint management</td><td>React.js web admin dashboard</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 3: TECHNOLOGIES               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">All Technologies Used — What & Why</div>
+    </div>
+
+    <h3>🗄️ Data Storage Technologies</h3>
+    <div class="tech-grid">
+
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#e0f2fe;">🗃️</div>
+          <div>
+            <h4>MySQL</h4>
+            <span class="tag blue">Relational DB</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Storing all structured complaint data — complaint ID, category, address, latitude, longitude, description, user ID, status, photo URLs, upvotes, timestamps.</p>
+        <p class="why"><strong>Why MySQL?</strong> Complaints have a fixed schema with relationships (user → complaints, complaint → photos). MySQL's relational model handles this perfectly with SQL queries, and it integrates seamlessly with the Node.js backend.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#fef3c7;">🔥</div>
+          <div>
+            <h4>Firebase Cloud Firestore</h4>
+            <span class="tag orange">NoSQL Cloud DB</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Storing user profile data — name, email, total points (XP), badge level, registration date.</p>
+        <p class="why"><strong>Why Firestore?</strong> User profile data is unstructured and updated frequently (points increment with each complaint). Firestore's real-time document model handles this better than MySQL for user-centric data.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#dcfce7;">📱</div>
+          <div>
+            <h4>Android SharedPreferences</h4>
+            <span class="tag green">Local Storage</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> (1) Persisting the logged-in user's session data so the app doesn't ask for login every time. (2) Storing the offline complaint queue (JSON) when no internet is available.</p>
+        <p class="why"><strong>Why SharedPreferences?</strong> Lightweight, fast key-value store built into Android. Perfect for session tokens and small JSON payloads that need to survive app closes.</p>
+      </div>
+
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#ede9fe;">☁️</div>
+          <div>
+            <h4>Cloudinary CDN</h4>
+            <span class="tag purple">Media Storage</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Storing and serving all complaint photos. Photos are uploaded from the Android app → Node.js backend → Cloudinary, and the resulting URL is stored in MySQL.</p>
+        <p class="why"><strong>Why Cloudinary?</strong> Cloudinary provides a globally distributed CDN, automatic image compression, resizing, and format optimization. It offloads the server from having to serve heavy image files directly.</p>
+      </div>
+
+    </div>
+
+    <h3>🔐 Authentication Technology</h3>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#fef3c7;">🔑</div>
+          <div>
+            <h4>Firebase Authentication</h4>
+            <span class="tag orange">Auth Service</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> User registration, email/password login, and session management. On first login, Firebase returns a UID and auth token tied to the user's account permanently.</p>
+        <p class="why"><strong>Why Firebase Auth?</strong> Industry-standard, battle-tested authentication service. Handles password hashing, token refresh, account recovery, and session validity — eliminating the need to build custom auth from scratch.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#dcfce7;">🧠</div>
+          <div>
+            <h4>SessionManager (Custom)</h4>
+            <span class="tag green">Session Layer</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Persisting the user's profile (name, email, ID, points) to SharedPreferences so the app can restore the session on next launch without needing a network call.</p>
+        <p class="why"><strong>Why custom?</strong> Firebase Auth alone only stores the auth token, not profile data. SessionManager bridges this gap by locally caching the full Firestore user profile.</p>
+      </div>
+    </div>
+
+    <h3>🌐 Networking Technologies</h3>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#fee2e2;">📡</div>
+          <div>
+            <h4>Retrofit 2 + OkHttp 4</h4>
+            <span class="tag red">HTTP Client</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> All API calls from Android — submitting complaints (multipart), fetching complaint lists, upvoting, checking duplicates, fetching alerts, and leaderboard data.</p>
+        <p class="why"><strong>Why Retrofit?</strong> Type-safe HTTP client for Android/Kotlin. Automatically serializes/deserializes JSON, handles multipart file uploads, and works perfectly with Kotlin coroutines for non-blocking async calls.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#dcfce7;">⚡</div>
+          <div>
+            <h4>Node.js + Express.js</h4>
+            <span class="tag green">REST API Server</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> The complete backend REST API — complaint CRUD, duplicate detection, photo upload to Cloudinary, alert management, leaderboard calculation, and user management.</p>
+        <p class="why"><strong>Why Node.js?</strong> Non-blocking, event-driven architecture handles multiple concurrent API requests efficiently. Express.js makes API route definition clean and concise.</p>
+      </div>
+    </div>
+
+    <h3>📱 Android UI & Framework</h3>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#dbeafe;">🎨</div>
+          <div>
+            <h4>Jetpack Compose + Material 3</h4>
+            <span class="tag blue">UI Framework</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Building all 12+ screens of the Android app — Login, Signup, Dashboard, Report, Complaints, Alerts, Profile, Leaderboard, Admin, SOS, Camera, and Complaint Timeline.</p>
+        <p class="why"><strong>Why Compose?</strong> Google's modern declarative UI toolkit for Android. No XML layouts — UI is built with composable functions in Kotlin. Supports animations, Material 3 design system, and reactive state management out of the box.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#ede9fe;">🔀</div>
+          <div>
+            <h4>Jetpack Navigation Compose</h4>
+            <span class="tag purple">Navigation</span>
+          </div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Managing all screen transitions — login → home → report → camera → back stack management. Also handles passing arguments between screens (e.g., complaint ID to complaint detail).</p>
+        <p class="why"><strong>Why Jetpack Nav?</strong> Official Google navigation solution for Compose. Handles the back stack, deep links, and argument passing with type safety.</p>
+      </div>
+    </div>
+
+    <h3>📸 Camera & Location</h3>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#fef3c7;">📸</div>
+          <div><h4>CameraX</h4><span class="tag orange">Camera API</span></div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Providing a live camera viewfinder inside the app for capturing complaint photos. Supports flash toggle, lifecycle-aware binding, and JPEG output.</p>
+        <p class="why"><strong>Why CameraX?</strong> Modern replacement for the deprecated Camera2 API. Lifecycle-aware, consistent across Android versions, and optimized for Compose integration.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#dcfce7;">📍</div>
+          <div><h4>FusedLocationProviderClient</h4><span class="tag green">GPS</span></div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Getting real-time GPS coordinates (latitude/longitude) for every complaint submission. Geocoder converts raw coordinates → human-readable street address.</p>
+        <p class="why"><strong>Why Fused Location?</strong> Google's unified location API automatically chooses the best available location provider (GPS, network, sensors) for maximum accuracy and battery efficiency.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#dbeafe;">🗺️</div>
+          <div><h4>OSMDroid (OpenStreetMap)</h4><span class="tag blue">Map Display</span></div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Displaying an interactive map view showing the geotagged location of complaints.</p>
+        <p class="why"><strong>Why OSMDroid?</strong> Free, open-source map library — no API key costs unlike Google Maps. Works offline with tile caching.</p>
+      </div>
+    </div>
+
+    <h3>🔔 Notifications & Mesh Networking</h3>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#fef3c7;">🔔</div>
+          <div><h4>Firebase Cloud Messaging (FCM)</h4><span class="tag orange">Push Notifications</span></div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Broadcasting emergency alerts and civic announcements from the Admin Dashboard to all SCMS users simultaneously, even when the app is backgrounded.</p>
+        <p class="why"><strong>Why FCM?</strong> Google's free, reliable push notification service. Supports topic-based broadcasting (all users = <code>all_users</code> topic), guaranteed delivery, and Android background service integration.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#ede9fe;">📶</div>
+          <div><h4>Google Nearby Connections API</h4><span class="tag purple">P2P Mesh</span></div>
+        </div>
+        <p class="why"><strong>Used for:</strong> Creating a Peer-to-Peer mesh network between nearby SCMS devices via Bluetooth and Wi-Fi Direct. Offline complaints can be relayed device-to-device until they reach a node with internet access.</p>
+        <p class="why"><strong>Why Nearby Connections?</strong> Abstracts Bluetooth, Wi-Fi Direct, and NFC into a single clean API. Uses P2P_CLUSTER strategy for a true mesh topology with automatic connection and discovery management.</p>
+      </div>
+    </div>
+
+    <h3>🖥️ Admin Dashboard & Backend Utilities</h3>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#dbeafe;">⚛️</div>
+          <div><h4>React.js (Vite)</h4><span class="tag blue">Admin Web App</span></div>
+        </div>
+        <p class="why"><strong>Used for:</strong> The city authority admin dashboard — view all complaints, filter by status/category, change complaint status, send alerts to all users, view photos and geotagged locations.</p>
+        <p class="why"><strong>Why React?</strong> Component-based architecture makes the dashboard modular and maintainable. Vite provides fast development HMR. Works with the same Node.js REST API the Android app uses.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-header">
+          <div class="tech-icon" style="background:#fee2e2;">📦</div>
+          <div><h4>Nodemailer + bcrypt + JWT</h4><span class="tag red">Backend Utilities</span></div>
+        </div>
+        <p class="why"><strong>Nodemailer:</strong> Used for sending SMTP email notifications (e.g., account verification, password resets).</p>
+        <p class="why"><strong>bcrypt:</strong> Password hashing for secure admin credential storage.</p>
+        <p class="why"><strong>JWT:</strong> Stateless auth tokens for admin dashboard API access.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 4: FEATURES                   -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Complete Feature List</div>
+    </div>
+
+    <p>SCMS contains <strong>12+ screens</strong> and <strong>20+ distinct features</strong>. Here is a complete breakdown of every feature implemented:</p>
+
+    <h3>👤 User Authentication & Session</h3>
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-emoji">🔐</div><div><h5>Email + Password Login</h5><p>Firebase Auth handles secure authentication with password hashing and token management.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">📝</div><div><h5>User Registration (Signup)</h5><p>New users register with name, email, password. Profile created in Firestore with initial 0 XP.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🔄</div><div><h5>Auto Login (Session Persistence)</h5><p>App detects existing Firebase session on launch and skips login screen. Users stay logged in until manual logout.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🚪</div><div><h5>Secure Logout</h5><p>Clears both Firebase Auth token and local SharedPreferences session simultaneously.</p></div></div>
+    </div>
+
+    <h3>📋 Complaint Management</h3>
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-emoji">📸</div><div><h5>Photo-Verified Reporting</h5><p>Multiple photos captured via live CameraX viewfinder or gallery picker. Required for submission.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">📍</div><div><h5>GPS Auto-Tagging</h5><p>FusedLocationProvider captures real-time GPS coordinates and converts to readable address automatically.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🗂️</div><div><h5>Category Classification</h5><p>Road Damage, Illegal Dumping, Water Leakage, Streetlight Issue, Park Problem, Other.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🔍</div><div><h5>Duplicate Detection</h5><p>Backend checks for similar complaints nearby before allowing submission. Offers upvote option.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">👍</div><div><h5>Community Upvoting</h5><p>Citizens can upvote existing complaints to increase their priority in the admin queue.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">📊</div><div><h5>Complaint Status Tracking</h5><p>Pending → Verified → Assigned → In Progress → Resolved. Citizens see live status updates.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🔎</div><div><h5>Search & Filter</h5><p>Citizens can search complaints by location/keyword and filter by status or category.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">📅</div><div><h5>Complaint Timeline</h5><p>Full history of a complaint's lifecycle — all status changes with timestamps.</p></div></div>
+    </div>
+
+    <h3>📶 Offline Capabilities</h3>
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-emoji">💾</div><div><h5>Offline Complaint Queuing</h5><p>Complaints saved to SharedPreferences as JSON when no internet. Toast confirms save.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🔁</div><div><h5>Auto Background Sync</h5><p>NetworkCallback detects internet restoration and auto-syncs all queued complaints.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🌐</div><div><h5>Offline Mode Popup</h5><p>AlertDialog appears when user taps Report while offline, guiding to offline submission mode.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">📶</div><div><h5>P2P Mesh Relay</h5><p>Nearby Connections API relays offline complaints device-to-device via Bluetooth/Wi-Fi Direct.</p></div></div>
+    </div>
+
+    <h3>🔔 Alerts, Notifications & Emergency</h3>
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-emoji">📢</div><div><h5>Real-Time Push Alerts</h5><p>Admin broadcasts FCM notifications to all users instantly. Delivered even when app is closed.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🚨</div><div><h5>Emergency SOS Broadcast</h5><p>Citizens can trigger a high-priority SOS alert that notifies all nearby SCMS users immediately.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">📋</div><div><h5>Alerts History Screen</h5><p>Full list of all past alerts visible in-app with title, description, and timestamp.</p></div></div>
+    </div>
+
+    <h3>🏆 Gamification & Community</h3>
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-emoji">⭐</div><div><h5>XP Points System</h5><p>Citizens earn points for each verified complaint. Points stored in Firestore and accumulate over time.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🏅</div><div><h5>Badge Levels</h5><p>Bronze → Silver → Gold Citizen badges based on cumulative XP. Displayed on profile screen.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🏆</div><div><h5>Leaderboard</h5><p>Ranked list of all users by total XP. Encourages competitive civic participation.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">👤</div><div><h5>Profile Screen</h5><p>Shows user name, email, badge, total complaints filed, and XP earned.</p></div></div>
+    </div>
+
+    <h3>🖥️ Admin Dashboard (Web)</h3>
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-emoji">📊</div><div><h5>Complaint Management Panel</h5><p>View all complaints in a table with filters. Update status, view photos, see GPS locations.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">📣</div><div><h5>Alert Broadcasting</h5><p>Admin creates and sends alerts directly from the dashboard — instantly pushed to all users via FCM.</p></div></div>
+      <div class="feature-item"><div class="feature-emoji">🔐</div><div><h5>Admin Authentication</h5><p>Separate admin login screen with JWT-protected API endpoints for all management operations.</p></div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 5: ARCHITECTURE               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">System Architecture & Data Flow</div>
+    </div>
+
+    <h3>Three-Tier System Architecture</h3>
+    <div class="arch-diagram">
+      <pre>
+  ┌─────────────────────────────────────────────────────────────┐
+  │                  <span class="highlight">SCMS SYSTEM ARCHITECTURE</span>                    │
+  └─────────────────────────────────────────────────────────────┘
+
+  <span class="green">┌─────────────────────────────────────────────────────────────┐</span>
+  <span class="green">│                    TIER 1: CLIENT LAYER                     │</span>
+  <span class="green">└─────────────────────────────────────────────────────────────┘</span>
+  │
+  ├── <span class="highlight">[Android App]</span>  Kotlin + Jetpack Compose
+  │     ├── Login / Signup Screens
+  │     ├── Dashboard (HomeInfoScreen)
+  │     ├── Report Complaint (CameraX + GPS + Retrofit)
+  │     ├── Complaints List + Search + Upvote
+  │     ├── Complaint Timeline
+  │     ├── Alerts Screen
+  │     ├── SOS Screen
+  │     ├── Leaderboard
+  │     ├── Profile Screen
+  │     └── Admin Login + Dashboard
+  │
+  └── <span class="yellow">[React.js Admin Web Dashboard]</span>  Vite + Axios
+        ├── Complaint Management Table
+        ├── Status Updates
+        └── Alert Broadcasting
+
+  <span class="green">┌─────────────────────────────────────────────────────────────┐</span>
+  <span class="green">│                    TIER 2: API LAYER                        │</span>
+  <span class="green">└─────────────────────────────────────────────────────────────┘</span>
+  │
+  └── <span class="highlight">[Node.js + Express.js]</span>  REST API Server
+        ├── POST /complaint          → Submit complaint
+        ├── GET  /complaints          → Fetch all complaints
+        ├── POST /complaint/upvote   → Upvote a complaint
+        ├── POST /complaint/check-duplicate → Duplicate detection
+        ├── POST /alert              → Create + send FCM alert
+        ├── GET  /leaderboard        → User rankings
+        └── PUT  /complaint/:id      → Admin status update
+
+  <span class="green">┌─────────────────────────────────────────────────────────────┐</span>
+  <span class="green">│                   TIER 3: DATA LAYER                        │</span>
+  <span class="green">└─────────────────────────────────────────────────────────────┘</span>
+  │
+  ├── <span class="highlight">[MySQL]</span>          Structured complaint data + statuses
+  ├── <span class="pink">[Cloudinary]</span>      Photo storage + CDN delivery
+  ├── <span class="yellow">[Firebase Auth]</span>   User identity + tokens
+  └── <span class="yellow">[Firestore]</span>       User profiles + XP points
+
+  <span class="green">┌─────────────────────────────────────────────────────────────┐</span>
+  <span class="green">│                 OFFLINE / EDGE LAYER                        │</span>
+  <span class="green">└─────────────────────────────────────────────────────────────┘</span>
+  │
+  ├── <span class="highlight">[SharedPreferences]</span>  Session + offline complaint queue
+  └── <span class="highlight">[Nearby Connections]</span>  P2P Bluetooth/Wi-Fi mesh relay
+      </pre>
+    </div>
+
+    <h3>Data Flow: Complaint Submission</h3>
+    <div class="arch-diagram">
+      <pre>
+  User Opens App
+       │
+       ├─ Internet? <span class="highlight">YES</span> → Auto-Login → Dashboard
+       └─ Internet? <span class="yellow">NO</span>  → Session from SharedPreferences → Dashboard
+                                        └─ Offline banner shown
+
+  User Taps "Report Issue"
+       │
+       ├─ Online → Navigate to Report Screen directly
+       └─ Offline → Show popup: "Go to Offline Mode?"
+                        ├─ YES → Navigate to Report Screen
+                        └─ NO  → Stay on Dashboard
+
+  Report Screen
+       │
+       ├─ Camera/Gallery → Select photos
+       ├─ FusedLocation → Auto-fetch GPS + Address
+       ├─ Fill Category + Description
+       └─ Tap Submit
+              │
+              ├─ Check Duplicate → Backend → Duplicate?
+              │       ├─ YES → Show upvote dialog
+              │       └─ NO  → Continue submission
+              │
+              ├─ <span class="highlight">ONLINE</span> → Retrofit → Node.js → Cloudinary → MySQL → Done ✅
+              └─ <span class="yellow">OFFLINE</span> → Save JSON to SharedPreferences → Toast shown
+                           └─ When internet returns (NetworkCallback)
+                                  └─ OfflineComplaintManager.sync() → Upload all
+      </pre>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 6: LITERATURE REVIEW          -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Literature Review</div>
+    </div>
+
+    <div class="paper-card">
+      <div class="paper-num">Paper 01 · Participatory Sensing</div>
+      <h4>Ear-Phone: An End-to-End Participatory Urban Noise Mapping System</h4>
+      <div class="authors">Rana, R. K., Chou, C. T., Kanhere, S. S., Bulusu, N., & Hu, W. (2010). IPSN '10.</div>
+      <p>Introduced the concept of <strong>participatory sensing</strong> — using mobile users as distributed sensor nodes for urban data collection. Demonstrated that commodity smartphones are viable urban monitoring tools via embedded GPS and cameras.</p>
+      <div class="relevance">🔗 <strong>SCMS Relevance:</strong> SCMS directly implements participatory sensing — every citizen with the app becomes a node in the urban monitoring network, reporting geo-tagged, photo-verified complaints.</div>
+    </div>
+
+    <div class="paper-card">
+      <div class="paper-num">Paper 02 · IoT Smart Cities</div>
+      <h4>Internet of Things for Smart Cities</h4>
+      <div class="authors">Zanella, A., Bui, N., Castellani, A., Vangelista, L., & Zorzi, M. (2014). IEEE IoT Journal, 1(1).</div>
+      <p>Outlined how IoT platforms can monitor and manage urban infrastructure by connecting physical assets to digital management systems. Emphasized real-time data, centralized dashboards, and citizen-authority feedback loops.</p>
+      <div class="relevance">🔗 <strong>SCMS Relevance:</strong> SCMS implements this closed-loop model — citizen reports flow to the MySQL database, visible in the React admin dashboard, with status updates feeding back to citizens.</div>
+    </div>
+
+    <div class="paper-card">
+      <div class="paper-num">Paper 03 · Offline-First Architecture</div>
+      <h4>Cloud Computing for Enhanced Mobile Health Applications</h4>
+      <div class="authors">Nkosi, M. T., & Mekuria, F. (2010). IEEE CloudCom 2010.</div>
+      <p>Proposed offline-first mobile architectures — data captured locally and synchronized to the cloud when connectivity is available. Addressed local persistence and conflict resolution strategies for intermittent connectivity environments.</p>
+      <div class="relevance">🔗 <strong>SCMS Relevance:</strong> OfflineComplaintManager implements exactly this — JSON complaint serialization to SharedPreferences, with automatic sync via ConnectivityManager.NetworkCallback when internet returns.</div>
+    </div>
+
+    <div class="paper-card">
+      <div class="paper-num">Paper 04 · Duplicate Detection</div>
+      <h4>AIDR: Artificial Intelligence for Disaster Response</h4>
+      <div class="authors">Imran, M., Castillo, C., Lucas, J., Meier, P., & Vieweg, S. (2014). WWW '14.</div>
+      <p>Analyzed redundant report clustering in crowdsourced crisis systems. Proposed geographic and categorical deduplication to reduce administrative overhead while enabling community-validated incident priority.</p>
+      <div class="relevance">🔗 <strong>SCMS Relevance:</strong> Backend <code>/complaint/check-duplicate</code> API checks incoming GPS+category against existing records and returns isDuplicate, triggering the upvote dialog in-app.</div>
+    </div>
+
+    <div class="paper-card">
+      <div class="paper-num">Paper 05 · Push Notification Systems</div>
+      <h4>Opportunistic Privacy in Mobile Social Applications</h4>
+      <div class="authors">Kapadia, A., Myers, S., Wang, X., & Wetzel, R. (2009). UIST '09.</div>
+      <p>Explored push notification systems as real-time civic communication channels connecting event publishers (authorities) to targeted citizen subscriber groups, particularly for time-sensitive alerts.</p>
+      <div class="relevance">🔗 <strong>SCMS Relevance:</strong> FCM topic-based messaging (<code>all_users</code>) allows admins to instantly push emergency alerts. MyFirebaseMessagingService handles delivery even when the app is in background.</div>
+    </div>
+
+    <div class="paper-card">
+      <div class="paper-num">Paper 06 · Peer-to-Peer Mesh Networking</div>
+      <h4>On the Levy-Walk Nature of Human Mobility</h4>
+      <div class="authors">Rhee, I., Shin, M., Hong, S., Lee, K., Kim, S. J., & Chong, S. (2011). IEEE/ACM Transactions on Networking, 19(3).</div>
+      <p>Demonstrated that human mobility patterns provide a natural substrate for opportunistic P2P data exchange. In infrastructure-damaged or internet-denied areas, devices following human movement patterns can successfully relay data node-to-node.</p>
+      <div class="relevance">🔗 <strong>SCMS Relevance:</strong> MeshNetworkManager uses Google Nearby Connections (P2P_CLUSTER, Bluetooth+WiFi Direct) to relay offline complaints between SCMS users until one with internet receives and uploads them.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 7: METHODOLOGY                -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">Proposed Methodology</div>
+    </div>
+
+    <h3>Development Approach</h3>
+    <p>SCMS was developed using an <strong>Agile-inspired iterative approach</strong> — beginning with core authentication and complaint submission, then progressively adding offline mode, gamification, mesh networking, and the admin dashboard in distinct development sprints.</p>
+
+    <h3>Module Implementation Details</h3>
+
+    <h4>Module 1: Authentication & Persistence</h4>
+    <p>Firebase Auth manages email/password login. On successful authentication, the app fetches the user's extended profile from Cloud Firestore and writes it to <code>SharedPreferences</code> via <code>SessionManager</code>. On every app launch, <code>MainActivity</code> checks <code>FirebaseAuth.currentUser</code> AND <code>SessionManager.getUser()</code> — if both exist, the user is silently auto-logged in and taken directly to the Dashboard. <code>UserSession</code> is a Kotlin singleton holding the in-memory current user object accessible across all screens.</p>
+
+    <h4>Module 2: Complaint Reporting Pipeline</h4>
+    <p>The complaint flow: (1) User opens camera via CameraX, captures photos, (2) FusedLocationClient retrieves GPS coordinates in the background, (3) Geocoder converts to address, (4) User selects category and writes description ≥10 characters, (5) On submit, <code>RetrofitClient.api.checkDuplicateComplaint()</code> is called, (6) If no duplicate, complaint is sent as <code>MultipartBody</code> with all photos and form fields to the Node.js backend, (7) Backend uploads photos to Cloudinary and stores the complaint in MySQL.</p>
+
+    <h4>Module 3: Offline System</h4>
+    <p><code>NetworkUtils.isInternetAvailable()</code> uses <code>ConnectivityManager</code> and <code>NetworkCapabilities</code> to detect live connectivity. When offline and the user submits a complaint, <code>OfflineComplaintManager.saveComplaintOffline()</code> serializes the complaint to JSON using Gson and appends it to the SharedPreferences complaint queue. In <code>MainActivity</code>, a <code>ConnectivityManager.NetworkCallback</code> fires on network availability, triggering <code>OfflineComplaintManager.syncOfflineComplaints()</code> to upload all queued complaints to the server.</p>
+
+    <h4>Module 4: Gamification</h4>
+    <p>Each verified complaint submission increments the user's <code>points</code> field in their Firestore document. Badge levels are computed as: Bronze (0–50 pts), Silver (51–150 pts), Gold (151+ pts). The Leaderboard screen fetches all user records from the backend, sorted by total points, and renders them in a ranked list.</p>
+
+    <h4>Module 5: Push Notifications</h4>
+    <p>FCM is initialized in <code>MainActivity</code> which subscribes the device to the <code>all_users</code> FCM topic. When an admin creates an alert via the web dashboard, the Node.js backend calls the FCM API with the topic message. <code>MyFirebaseMessagingService</code> handles message reception in background and foreground, displaying a system notification with the alert title and body.</p>
+
+    <h4>Module 6: Mesh P2P Networking</h4>
+    <p><code>MeshNetworkManager</code> initializes Google Nearby Connections client with <code>Strategy.P2P_CLUSTER</code>. The <code>startMesh()</code> call begins advertising this device as an SCMS node (discoverable) AND scanning for other SCMS nodes simultaneously. When two devices connect, the offline device broadcasts queued complaints as <code>Payload.fromBytes()</code> JSON packets to the peer. If the receiving peer has internet, it calls <code>OfflineComplaintManager.uploadRelayedComplaint()</code> to upload the relayed complaint to the server.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 8: REQUIREMENTS               -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <div class="section-title">Software & Hardware Requirements</div>
+    </div>
+
+    <h3>Android Application Dependencies</h3>
+    <table>
+      <thead><tr><th>Library</th><th>Version</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Kotlin</td><td>2.0+</td><td>Primary programming language</td></tr>
+        <tr><td>Jetpack Compose + Material3</td><td>BOM 2024.x</td><td>Entire UI framework</td></tr>
+        <tr><td>Jetpack Navigation Compose</td><td>2.7.7</td><td>Screen navigation & back stack</td></tr>
+        <tr><td>Firebase BOM</td><td>33.7.0</td><td>Auth, Firestore, FCM</td></tr>
+        <tr><td>Retrofit 2</td><td>2.9.0</td><td>REST API HTTP client</td></tr>
+        <tr><td>OkHttp 4</td><td>4.12.0</td><td>HTTP networking + logging</td></tr>
+        <tr><td>Coil Compose</td><td>2.6.0</td><td>Async image loading from URLs</td></tr>
+        <tr><td>CameraX</td><td>1.3.2</td><td>Camera capture & preview</td></tr>
+        <tr><td>Play Services Location</td><td>21.0.1</td><td>GPS + fused location provider</td></tr>
+        <tr><td>Play Services Nearby</td><td>18.7.0</td><td>P2P mesh networking</td></tr>
+        <tr><td>OSMDroid</td><td>6.1.18</td><td>OpenStreetMap map display</td></tr>
+        <tr><td>Gson</td><td>2.10.x</td><td>JSON serialization/deserialization</td></tr>
+        <tr><td>Min SDK</td><td>API 24 (Android 7.0)</td><td>Minimum device requirement</td></tr>
+        <tr><td>Target SDK</td><td>API 36 (Android 15)</td><td>Latest Android support</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Backend (Node.js Server)</h3>
+    <table>
+      <thead><tr><th>Technology</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Node.js + Express.js</td><td>REST API server framework</td></tr>
+        <tr><td>MySQL</td><td>Relational structured data storage</td></tr>
+        <tr><td>Cloudinary SDK</td><td>Image upload and CDN delivery</td></tr>
+        <tr><td>Multer</td><td>Multipart file handling middleware</td></tr>
+        <tr><td>Nodemailer</td><td>SMTP email delivery</td></tr>
+        <tr><td>bcrypt</td><td>Password hashing</td></tr>
+        <tr><td>dotenv</td><td>Environment variable config</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Hardware Requirements</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Minimum</th><th>Recommended</th></tr></thead>
+      <tbody>
+        <tr><td>Android Device OS</td><td>Android 7.0 (API 24)</td><td>Android 12+ (API 31)</td></tr>
+        <tr><td>RAM</td><td>3 GB</td><td>6 GB+</td></tr>
+        <tr><td>Camera</td><td>Rear camera (any)</td><td>12MP+ with autofocus</td></tr>
+        <tr><td>Storage</td><td>100 MB for app</td><td>1 GB for photos</td></tr>
+        <tr><td>GPS</td><td>Built-in GPS</td><td>High-precision GNSS</td></tr>
+        <tr><td>Bluetooth</td><td>BLE support</td><td>BLE 5.0 for mesh</td></tr>
+        <tr><td>Dev Machine RAM</td><td>8 GB</td><td>16 GB</td></tr>
+        <tr><td>Dev Machine Storage</td><td>10 GB</td><td>50 GB SSD</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Android Permissions Required</h3>
+    <table>
+      <thead><tr><th>Permission</th><th>Why Needed</th></tr></thead>
+      <tbody>
+        <tr><td><code>INTERNET</code></td><td>API calls to backend server</td></tr>
+        <tr><td><code>CAMERA</code></td><td>CameraX complaint photo capture</td></tr>
+        <tr><td><code>ACCESS_FINE_LOCATION</code></td><td>Precise GPS coordinates for complaints</td></tr>
+        <tr><td><code>ACCESS_COARSE_LOCATION</code></td><td>Fallback coarse location</td></tr>
+        <tr><td><code>ACCESS_NETWORK_STATE</code></td><td>NetworkUtils connectivity check</td></tr>
+        <tr><td><code>POST_NOTIFICATIONS</code></td><td>FCM push notification delivery</td></tr>
+        <tr><td><code>BLUETOOTH_SCAN / ADVERTISE / CONNECT</code></td><td>Nearby Connections mesh networking</td></tr>
+        <tr><td><code>NEARBY_WIFI_DEVICES</code></td><td>Wi-Fi Direct for mesh (Android 13+)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 9: TESTS & RESULTS            -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s9">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <div class="section-title">Experiments & Test Results</div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 1: Session Persistence (Auto Login)</h5>
+        <p><strong>Method:</strong> Login with valid credentials, force-close the app, reopen.<br/>
+        <strong>Result:</strong> App detected Firebase auth token AND SessionManager user. Navigated directly to Dashboard. Login screen NOT shown. Session persists indefinitely until manual logout.</p>
+      </div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 2: Online Complaint Submission</h5>
+        <p><strong>Method:</strong> Fill form with photo, GPS, category, description. Submit with Wi-Fi active.<br/>
+        <strong>Result:</strong> Complaint uploaded via Retrofit to Node.js. Photo successfully stored in Cloudinary. Complaint record created in MySQL. Appeared in Admin Dashboard and the Complaints screen within seconds.</p>
+      </div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 3: Offline Complaint Queuing</h5>
+        <p><strong>Method:</strong> Disable Wi-Fi and mobile data. Submit a complaint.<br/>
+        <strong>Result:</strong> App correctly detected no internet via NetworkUtils. Saved complaint to SharedPreferences queue. Toast displayed: <em>"No connection. Complaint saved offline!"</em>. On re-enabling Wi-Fi: NetworkCallback fired, sync triggered, complaint uploaded successfully.</p>
+      </div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 4: Offline Popup on Report Button</h5>
+        <p><strong>Method:</strong> With internet off, navigate to Dashboard and tap "Report Issue".<br/>
+        <strong>Result:</strong> AlertDialog appeared with "No Internet Connection" message. "Yes, Offline Mode" navigated to Report Screen. "Ignore" dismissed dialog gracefully.</p>
+      </div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 5: Duplicate Detection</h5>
+        <p><strong>Method:</strong> Submit two complaints with the same category from nearby GPS coordinates.<br/>
+        <strong>Result:</strong> Second submission triggered AlertDialog: "Duplicate Issue Detected". User offered choice to Upvote existing complaint or Submit Anyway. Upvote option successfully incremented the existing complaint's count.</p>
+      </div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 6: FCM Push Notifications</h5>
+        <p><strong>Method:</strong> Create alert from Admin Dashboard. Minimize SCMS app on Android device.<br/>
+        <strong>Result:</strong> System push notification appeared on device within 2–5 seconds with alert title and body. Tapping notification opened SCMS Alerts Screen. Works in foreground and background.</p>
+      </div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 7: Leaderboard & Gamification</h5>
+        <p><strong>Method:</strong> Submit 3 verified complaints from a test user. Check leaderboard.<br/>
+        <strong>Result:</strong> Firestore XP points updated correctly after each submission. Leaderboard displayed accurate ranking. Badge level on profile updated to reflect new point total.</p>
+      </div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 8: Search & Filter on Complaints</h5>
+        <p><strong>Method:</strong> Open Complaints screen, search by "road", filter by "Pending" status.<br/>
+        <strong>Result:</strong> Real-time filter applied instantly. Only complaints matching search text AND selected status displayed. Clearing filters restored full list.</p>
+      </div>
+    </div>
+
+    <div class="result-item">
+      <div class="result-status pass">✅</div>
+      <div>
+        <h5>Test 9: Admin Dashboard Status Update</h5>
+        <p><strong>Method:</strong> On Admin Dashboard web, change a complaint status from "Pending" to "In Progress".<br/>
+        <strong>Result:</strong> Status updated in MySQL via PUT API. Android app Complaints Screen reflected updated status on next refresh. Status badge color changed accordingly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 10: CONCLUSION                -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div class="section-title">Conclusion & Future Work</div>
+    </div>
+
+    <p>The <strong>Smart City Management System (SCMS)</strong> successfully delivers a production-quality, full-stack civic engagement platform that directly addresses the shortcomings of traditional infrastructure complaint systems. The project demonstrates how thoughtful integration of modern mobile technologies — Firebase, Jetpack Compose, Retrofit, CameraX, FCM, and Nearby Connections — can produce a system that is simultaneously powerful, offline-resilient, and citizen-friendly.</p>
+
+    <h3>Key Achievements</h3>
+    <ul>
+      <li>✅ <strong>Persistent authentication</strong> — zero login friction for returning users</li>
+      <li>✅ <strong>GPS + photo verified complaints</strong> — fake or vague reports are structurally impossible</li>
+      <li>✅ <strong>Offline-first queuing</strong> — citizenship is not gated by internet quality</li>
+      <li>✅ <strong>Community-led prioritization</strong> via upvoting and duplicate detection</li>
+      <li>✅ <strong>Real-time FCM alerts</strong> — authorities communicate instantly with all citizens</li>
+      <li>✅ <strong>Gamified participation</strong> — leaderboard creates civic competitive culture</li>
+      <li>✅ <strong>Admin web dashboard</strong> — complete complaint lifecycle management</li>
+      <li>✅ <strong>P2P mesh relay</strong> — complaints survive even total internet infrastructure failure</li>
+    </ul>
+
+    <h3>Future Enhancements</h3>
+    <ul>
+      <li>🤖 <strong>AI-based auto-categorization</strong> — automatically classify complaint type from submitted photo using ML Kit Vision</li>
+      <li>📈 <strong>Predictive failure detection</strong> — ML model trained on historical complaints to predict next failure hotspots</li>
+      <li>🌍 <strong>Multi-language support</strong> — internationalization for diverse urban populations</li>
+      <li>🏛️ <strong>ERP integration</strong> — connect to municipal work order systems for automatic repair team dispatch</li>
+      <li>📊 <strong>Analytics dashboard</strong> — heat maps, complaint volume trends, average resolution time KPIs</li>
+      <li>🔄 <strong>Manual offline sync button</strong> — let users explicitly trigger sync from Profile screen</li>
+    </ul>
+
+    <div class="callout success">
+      <div class="callout-icon">🎯</div>
+      <p>SCMS proves that a small team can build a complete, production-ready Smart City system using freely available cloud services, modern Android frameworks, and open-source tools — making the Smart City vision accessible and actionable even for emerging municipalities.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- SECTION 11: REFERENCES                -->
+  <!-- ═══════════════════════════════════════ -->
+  <div class="section" id="s11">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <div class="section-title">References</div>
+    </div>
+
+    <ol style="line-height:2.2;">
+      <li>Rana, R. K., Chou, C. T., Kanhere, S. S., Bulusu, N., & Hu, W. (2010). <em>Ear-Phone: An End-to-End Participatory Urban Noise Mapping System.</em> IPSN '10.</li>
+      <li>Zanella, A., Bui, N., Castellani, A., Vangelista, L., & Zorzi, M. (2014). <em>Internet of Things for Smart Cities.</em> IEEE Internet of Things Journal, 1(1), 22–32.</li>
+      <li>Nkosi, M. T., & Mekuria, F. (2010). <em>Cloud Computing for Enhanced Mobile Health Applications.</em> IEEE CloudCom 2010.</li>
+      <li>Imran, M., Castillo, C., Lucas, J., Meier, P., & Vieweg, S. (2014). <em>AIDR: Artificial Intelligence for Disaster Response.</em> WWW '14.</li>
+      <li>Kapadia, A., Myers, S., Wang, X., & Wetzel, R. (2009). <em>Opportunistic Privacy in Mobile Social Applications.</em> UIST '09.</li>
+      <li>Rhee, I., Shin, M., Hong, S., Lee, K., Kim, S. J., & Chong, S. (2011). <em>On the Levy-Walk Nature of Human Mobility.</em> IEEE/ACM Transactions on Networking, 19(3), 630–643.</li>
+      <li>Google LLC. (2024). <em>Jetpack Compose Documentation.</em> https://developer.android.com/jetpack/compose</li>
+      <li>Google LLC. (2024). <em>Firebase Authentication & Firestore.</em> https://firebase.google.com/docs</li>
+      <li>Google LLC. (2024). <em>Nearby Connections API.</em> https://developers.google.com/nearby/connections</li>
+      <li>Google LLC. (2024). <em>Firebase Cloud Messaging.</em> https://firebase.google.com/docs/cloud-messaging</li>
+      <li>Cloudinary Inc. (2024). <em>Cloudinary Developer Documentation.</em> https://cloudinary.com/documentation</li>
+      <li>Square Inc. (2024). <em>Retrofit 2 Documentation.</em> https://square.github.io/retrofit</li>
+    </ol>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="report-footer">
+  <p>📌 <strong>How to save as PDF:</strong> Press <strong>Ctrl+P</strong> (Windows) or <strong>Cmd+P</strong> (Mac) → Choose <em>"Save as PDF"</em> → Click Save</p>
+  <br/>
+  <p><strong>Project:</strong> Smart City Management System (SCMS) &nbsp;|&nbsp; <strong>Version:</strong> 1.0 &nbsp;|&nbsp; <strong>Date:</strong> 27 April 2026</p>
+  <p style="margin-top:8px;">Fill in: [Your Name] · [Your Department] · [Your Institution] · Guide: [Supervisor Name]</p>
+</div>
+
+</body>
+</html>

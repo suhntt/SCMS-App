@@ -1,0 +1,23 @@
+# Android build artifacts
+/build/
+app/build/
+.gradle/
+*.apk
+*.aab
+*.ap_
+local.properties
+
+# IDE
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.DS_Store
+*.iml
+
+# Kotlin build
+.kotlin/
+**/.kotlin/
+
+# Navigation IDs
+app/src/main/res/navigation/*.xml.bak

@@ -57,3 +57,9 @@ firestore-debug.log
 # ========================
 dist/
 .vite/
+.idea/
+build/
+.gradle/
+node_modules/
+dist/
+.DS_Store

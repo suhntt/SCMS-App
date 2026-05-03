@@ -5,6 +5,23 @@
 
 ---
 
+## 🧩 Project Logic & Transparency
+If you are a non-technical evaluator, please refer to our **[PROJECT_LOGIC_GUIDE.md](PROJECT_LOGIC_GUIDE.md)** for a plain-English explanation of how the system works.
+
+### Core Logic Flow:
+```mermaid
+graph LR
+    A[Citizen Report] --> B{Sentinel AI}
+    B -- Duplicate? --> C[Notify User]
+    B -- Unique? --> D[Analyze Sentiment]
+    D --> E[Command Center]
+    E --> F[Dept. Dispatch]
+    F --> G{Community Verification}
+    G -- Verified? --> H[Resolved ✅]
+```
+
+---
+
 ## 🚀 The "Sentinel" System Workflow: How it Works
 
 The SCMS ecosystem operates through a closed-loop intelligence cycle between the **Citizen**, the **AI Engine**, and the **City Administrator**.
@@ -70,7 +87,7 @@ Uses **Firebase Cloud Messaging (FCM)** with `PRIORITY_HIGH` flags to ensure tha
 
 ### 1. Backend Setup
 ```bash
-cd scms-backend
+cd WEB_AND_BACKEND/scms-backend
 npm install
 # Add your .env (CLOUDINARY_URL, FIREBASE_CONFIG)
 npm start
@@ -78,13 +95,13 @@ npm start
 
 ### 2. Admin Setup
 ```bash
-cd scms-admin
+cd WEB_AND_BACKEND/scms-admin
 npm install
 npm run dev
 ```
 
 ### 3. Mobile App Setup
-- Open `app/` in Android Studio.
+- Open **ANDROID_APP** folder in Android Studio.
 - Change `BASE_URL` in `data/network/RetrofitClient.kt` to your machine's IP address.
 - Connect your phone and press **Run**.
 
