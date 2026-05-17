@@ -57,7 +57,7 @@ object NotificationUtils {
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
-    fun showProximityAlert(context: Context, category: String, distance: Int) {
+    fun showProximityAlert(context: Context, category: String, distance: Int, complaintId: String) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val proximityChannelId = "scms_safety_channel"
 
@@ -68,7 +68,10 @@ object NotificationUtils {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java).apply {
+            putExtra("screen", "timeline")
+            putExtra("complaintId", complaintId)
+        }
         val pendingIntent = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val notification = NotificationCompat.Builder(context, proximityChannelId)

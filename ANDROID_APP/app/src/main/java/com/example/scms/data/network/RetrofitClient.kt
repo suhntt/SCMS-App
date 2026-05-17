@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
     // ⚠️ UPDATE THIS IP if you change Wi-Fi networks (run: ipconfig getifaddr en0 in terminal)
-    private const val BASE_URL = "http://192.168.1.35:3000/"
+    private const val BASE_URL = "http://10.35.109.89:3000/"
 
     private val authInterceptor = Interceptor { chain ->
         val original = chain.request()

@@ -60,7 +60,7 @@ fun formatTo12Hour(isoDate: String): String {
         val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.US)
         inputFormat.timeZone = java.util.TimeZone.getTimeZone("UTC")
         val date = inputFormat.parse(isoDate)
-        val outputFormat = java.text.SimpleDateFormat("hh:mm a", java.util.Locale.US)
+        val outputFormat = java.text.SimpleDateFormat("MMM dd, hh:mm a", java.util.Locale.US)
         outputFormat.format(date ?: java.util.Date())
     } catch (e: Exception) {
         isoDate

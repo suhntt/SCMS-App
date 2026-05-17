@@ -28,7 +28,7 @@ object GeofenceManager {
                     val lastNotified = notifiedHazards[hazard.id] ?: 0L
                     if (currentTime - lastNotified > 30 * 60 * 1000) {
                         Log.d("GeofenceManager", "⚠️ Safety Alert: User near ${hazard.category} at ${distanceMeters}m")
-                        NotificationUtils.showProximityAlert(context, hazard.category ?: "Hazard", distanceMeters.toInt())
+                        NotificationUtils.showProximityAlert(context, hazard.category ?: "Hazard", distanceMeters.toInt(), hazard.id)
                         notifiedHazards[hazard.id] = currentTime
                     }
                 }

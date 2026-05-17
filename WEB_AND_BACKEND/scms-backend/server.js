@@ -620,6 +620,8 @@ app.post("/complaint", upload.array("photos", 5), async (req, res) => {
     const RADIUS_KM = 5; // Notification radius in km (adjustable)
 
     try {
+      // ONLY broadcast alerts and push notifications for severe hazards to avoid spamming users
+      if (finalSeverity === 'High' || finalSeverity === 'Medium') {
       // Save the alert document first (for AlertsScreen real-time feed)
       const newAlertId = await getNextId("alerts");
       await db.collection("alerts").doc(newAlertId.toString()).set({
@@ -716,6 +718,7 @@ app.post("/complaint", upload.array("photos", 5), async (req, res) => {
             data: { screen: "alerts", complaintId: newId.toString() }
           }).catch(e => console.error("Fallback district broadcast failed:", e));
         }
+      }
       }
     } catch (alertErr) {
       console.error("Alert/notification error:", alertErr);
